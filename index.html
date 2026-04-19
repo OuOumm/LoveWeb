@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱在指尖 - 情人节专属告白</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.404888.xyz/proxy/https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        love: {
+                            primary: '#FF4B91',
+                            secondary: '#FF85B3',
+                            accent: '#FFC1D6',
+                            blush: '#FFF3F8',
+                            light: '#FFF7FB',
+                            dark: '#C2185B',
+                            ink: '#3D1631'
+                        }
+                    },
+                    boxShadow: {
+                        romantic: '0 20px 60px rgba(255, 75, 145, 0.16)',
+                        soft: '0 10px 30px rgba(148, 163, 184, 0.14)'
+                    },
+                    fontFamily: {
+                        romantic: ['Dancing Script', 'cursive'],
+                        sans: ['"Inter"', '"PingFang SC"', '"Microsoft YaHei"', 'sans-serif']
+                    },
+                    animation: {
+                        float: 'float 4s ease-in-out infinite',
+                        fadeIn: 'fadeIn .8s ease forwards',
+                        pulseSoft: 'pulseSoft 2.8s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0, transform: 'translateY(18px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { opacity: 0.75 },
+                            '50%': { opacity: 1 }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(255, 193, 214, 0.65), transparent 28%),
+                radial-gradient(circle at top right, rgba(255, 133, 179, 0.24), transparent 24%),
+                linear-gradient(180deg, #fff8fb 0%, #fff4f8 42%, #fffdfd 100%);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.84);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .hero-grid {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), transparent 92%);
+        }
+
+        .heart {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: linear-gradient(135deg, rgba(255, 75, 145, 0.85), rgba(255, 133, 179, 0.78));
+            transform: rotate(45deg);
+            border-radius: 2px;
+            animation: rise 5.8s linear forwards;
+            opacity: 0.65;
+            box-shadow: 0 0 24px rgba(255, 75, 145, 0.28);
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -7px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -7px;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translate3d(0, 0, 0) rotate(45deg) scale(0.8);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translate3d(var(--drift, 0), -110vh, 0) rotate(45deg) scale(1.25);
+                opacity: 0;
+            }
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(255, 75, 145, 0.18);
+            background: rgba(255, 255, 255, 0.78);
+            color: #c2185b;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .icon-btn:hover,
+        .card-hover:hover {
+            box-shadow: 0 18px 40px rgba(255, 75, 145, 0.14);
+        }
+
+        .example-card:hover .example-arrow {
+            transform: translateX(4px);
+        }
+
+        .ring-focus:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 75, 145, 0.18);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-sans text-slate-900 overflow-x-hidden selection:bg-love-primary/20">
+    <div id="heartContainer" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <header class="fixed top-4 left-4 right-4 z-50">
+        <nav id="navbar"
+            class="glass-panel mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-4 py-3 shadow-soft transition-all duration-300 md:px-6"
+            aria-label="主导航">
+            <a href="#home" class="flex items-center gap-3 rounded-full ring-focus" aria-label="返回首页">
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-love-primary/12 text-love-primary">
+                    <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current" aria-hidden="true">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                </span>
+                <span>
+                    <span class="block text-lg font-bold text-love-ink">爱在指尖</span>
+                    <span class="block text-xs text-slate-500">把告白变成值得珍藏的页面</span>
+                </span>
+            </a>
+
+            <div class="hidden items-center gap-2 md:flex">
+                <a href="#home"
+                    class="rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">首页</a>
+                <a href="#create"
+                    class="rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">创建告白</a>
+                <a href="#examples"
+                    class="rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">灵感示例</a>
+                <a href="#about"
+                    class="rounded-full px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">关于</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="#create"
+                    class="hidden rounded-full bg-love-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-love-primary/20 transition-colors duration-200 hover:bg-love-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/40 md:inline-flex">立即制作</a>
+                <button id="menuBtn" type="button"
+                    class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/80 text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30 md:hidden"
+                    aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+                    <svg viewBox="0 0 24 24" class="h-6 w-6 stroke-current" fill="none" stroke-width="1.8"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobileMenu" class="mx-auto mt-3 hidden max-w-7xl">
+            <div class="glass-panel rounded-2xl px-4 py-4 shadow-soft">
+                <div class="flex flex-col gap-2">
+                    <a href="#home" class="rounded-xl px-4 py-3 text-slate-700 transition-colors duration-200 hover:bg-love-primary/8 hover:text-love-primary">首页</a>
+                    <a href="#create" class="rounded-xl px-4 py-3 text-slate-700 transition-colors duration-200 hover:bg-love-primary/8 hover:text-love-primary">创建告白</a>
+                    <a href="#examples" class="rounded-xl px-4 py-3 text-slate-700 transition-colors duration-200 hover:bg-love-primary/8 hover:text-love-primary">灵感示例</a>
+                    <a href="#about" class="rounded-xl px-4 py-3 text-slate-700 transition-colors duration-200 hover:bg-love-primary/8 hover:text-love-primary">关于</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10">
+        <section id="home" class="relative px-4 pb-20 pt-32 md:px-6 md:pt-36">
+            <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
+                <div class="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/78 px-6 py-10 shadow-romantic backdrop-blur-xl md:px-10 md:py-12">
+                    <div class="hero-grid absolute inset-0 opacity-70"></div>
+                    <div class="absolute -left-10 top-10 h-40 w-40 rounded-full bg-love-accent/35 blur-3xl"></div>
+                    <div class="absolute -right-10 bottom-0 h-44 w-44 rounded-full bg-love-secondary/20 blur-3xl"></div>
+
+                    <div class="relative space-y-7 animate-fadeIn">
+                        <span class="section-label">
+                            <span class="h-2 w-2 rounded-full bg-love-primary animate-pulseSoft"></span>
+                            浪漫、轻盈、可分享的告白体验
+                        </span>
+                        <div class="space-y-5">
+                            <h1 class="max-w-3xl text-[clamp(2.8rem,6vw,5rem)] font-romantic font-bold leading-none text-love-ink">
+                                把一句喜欢，
+                                <span class="block text-love-primary">做成一页心动</span>
+                            </h1>
+                            <p class="max-w-2xl text-[clamp(1rem,2vw,1.15rem)] leading-8 text-slate-600">
+                                输入昵称、署名与想说的话，几秒内生成一份专属告白页。支持链接、二维码与密码保护，让分享更私密，也更有仪式感。
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+                            <a href="#create"
+                                class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-love-primary px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-love-primary/25 transition-colors duration-200 hover:bg-love-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/35">
+                                <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current" aria-hidden="true">
+                                    <path
+                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                                立即开始制作
+                            </a>
+                            <button id="playMusic" type="button"
+                                class="icon-btn inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-love-primary/20 bg-white px-7 py-3.5 text-base font-semibold text-love-dark transition-colors duration-200 hover:border-love-primary/35 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                <svg viewBox="0 0 24 24" class="h-5 w-5 stroke-current" fill="none" stroke-width="1.8"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 18V6l10-2v12M9 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                                </svg>
+                                播放音乐
+                            </button>
+                        </div>
+
+                        <div class="grid gap-4 pt-2 md:grid-cols-3">
+                            <article class="card-hover rounded-3xl border border-rose-100 bg-white/88 p-5 transition-shadow duration-200">
+                                <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-love-primary/10 text-love-primary">
+                                    <svg viewBox="0 0 24 24" class="h-6 w-6 stroke-current" fill="none" stroke-width="1.8"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 17A2.5 2.5 0 0 0 4 19.5m2.5-2.5H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13" />
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-lg font-semibold text-slate-900">写下心意</h3>
+                                <p class="text-sm leading-7 text-slate-600">用昵称、署名和一段真诚的话，快速搭建属于你们的私人告白页。</p>
+                            </article>
+                            <article class="card-hover rounded-3xl border border-rose-100 bg-white/88 p-5 transition-shadow duration-200">
+                                <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-love-primary/10 text-love-primary">
+                                    <svg viewBox="0 0 24 24" class="h-6 w-6 stroke-current" fill="none" stroke-width="1.8"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2Z" />
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-lg font-semibold text-slate-900">生成专属链接</h3>
+                                <p class="text-sm leading-7 text-slate-600">自动创建访问地址与二维码，适合微信、QQ、微博或邮件分享。</p>
+                            </article>
+                            <article class="card-hover rounded-3xl border border-rose-100 bg-white/88 p-5 transition-shadow duration-200">
+                                <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-love-primary/10 text-love-primary">
+                                    <svg viewBox="0 0 24 24" class="h-6 w-6 stroke-current" fill="none" stroke-width="1.8"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 2 4 5v6c0 5 3.4 9.74 8 11 4.6-1.26 8-6 8-11V5l-8-3Zm0 7a2 2 0 0 1 2 2v1h-4v-1a2 2 0 0 1 2-2Zm-3 4h6v5H9v-5Z" />
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-lg font-semibold text-slate-900">私密又体面</h3>
+                                <p class="text-sm leading-7 text-slate-600">可选密码保护，既保留仪式感，也避免把心意暴露给所有人。</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="relative">
+                    <div class="glass-panel rounded-[2rem] border border-white/90 p-6 shadow-romantic md:p-8">
+                        <div class="mb-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-love-primary/80">Preview</p>
+                                <h2 class="mt-2 text-2xl font-semibold text-slate-900">预览你的告白氛围</h2>
+                            </div>
+                            <span class="rounded-full bg-love-primary/10 px-3 py-1 text-xs font-semibold text-love-primary">实时灵感</span>
+                        </div>
+                        <div class="rounded-[1.75rem] bg-gradient-to-br from-love-primary via-love-secondary to-love-dark p-[1px]">
+                            <div class="rounded-[1.7rem] bg-white/95 p-5">
+                                <div class="rounded-[1.5rem] bg-gradient-to-br from-love-primary to-love-dark px-6 py-8 text-white shadow-lg">
+                                    <p class="text-sm uppercase tracking-[0.3em] text-white/75">To someone special</p>
+                                    <h3 class="mt-4 text-4xl font-romantic font-bold">致最特别的你</h3>
+                                    <p class="mt-5 text-sm leading-7 text-white/88">
+                                        遇见你之后，日常都被温柔重新定义。你不只是我的心动对象，也是我想认真对待的未来。
+                                    </p>
+                                    <div class="mt-8 flex items-center gap-3 text-sm text-white/80">
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/18">
+                                            <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current" aria-hidden="true">
+                                                <path
+                                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                            </svg>
+                                        </span>
+                                        <span>来自认真准备这份告白的你</span>
+                                    </div>
+                                </div>
+                                <dl class="mt-5 grid grid-cols-3 gap-3 text-center">
+                                    <div class="rounded-2xl bg-love-blush px-3 py-4">
+                                        <dt class="text-xs font-semibold uppercase tracking-wide text-love-primary/80">链接</dt>
+                                        <dd class="mt-2 text-sm font-semibold text-slate-800">1 键生成</dd>
+                                    </div>
+                                    <div class="rounded-2xl bg-love-blush px-3 py-4">
+                                        <dt class="text-xs font-semibold uppercase tracking-wide text-love-primary/80">二维码</dt>
+                                        <dd class="mt-2 text-sm font-semibold text-slate-800">随时分享</dd>
+                                    </div>
+                                    <div class="rounded-2xl bg-love-blush px-3 py-4">
+                                        <dt class="text-xs font-semibold uppercase tracking-wide text-love-primary/80">密码</dt>
+                                        <dd class="mt-2 text-sm font-semibold text-slate-800">可选保护</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+            <audio id="music" loop preload="none">
+                <source src="https://static.wenjuan.pub/rspd/upload_file/555ad8c7f7405b0e29df9fcf/music_a709009aea561085cbabff4f66c4d6c6.mp3" type="audio/mpeg">
+            </audio>
+        </section>
+
+        <section id="create" class="px-4 py-20 md:px-6">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-12 text-center">
+                    <span class="section-label">Create your page</span>
+                    <h2 class="mt-4 text-[clamp(2.2rem,4vw,3.25rem)] font-romantic font-bold text-love-ink">
+                        创建你的专属告白
+                    </h2>
+                    <p class="mx-auto mt-4 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
+                        保持内容真实、简洁、有画面感。你写下的每一句话，都会被包装成更有仪式感的分享页面。
+                    </p>
+                </div>
+
+                <div class="grid gap-8 lg:grid-cols-[1fr_0.38fr]">
+                    <div class="glass-panel rounded-[2rem] p-6 shadow-romantic md:p-10">
+                        <form id="confessionForm" class="space-y-7" novalidate>
+                            <div class="grid gap-6 md:grid-cols-2">
+                                <div class="space-y-2.5">
+                                    <label for="recipient" class="text-sm font-semibold text-slate-800">对方昵称</label>
+                                    <input type="text" id="recipient" name="recipient" required maxlength="40"
+                                        class="ring-focus w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:border-love-primary"
+                                        placeholder="例如：宝贝、小月、亲爱的">
+                                </div>
+                                <div class="space-y-2.5">
+                                    <label for="sender" class="text-sm font-semibold text-slate-800">你的名字</label>
+                                    <input type="text" id="sender" name="sender" autocomplete="username" required maxlength="40"
+                                        class="ring-focus w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:border-love-primary"
+                                        placeholder="例如：想认真喜欢你的人">
+                                </div>
+                            </div>
+
+                            <div class="space-y-2.5">
+                                <label for="message" class="text-sm font-semibold text-slate-800">告白内容</label>
+                                <textarea id="message" name="message" rows="7" required maxlength="500"
+                                    class="ring-focus w-full resize-none rounded-3xl border border-slate-200 bg-white px-4 py-4 text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:border-love-primary"
+                                    placeholder="写下你想对 TA 说的话，越真诚越打动人。"></textarea>
+                                <div class="flex items-center justify-between text-sm text-slate-500">
+                                    <span>建议 60-180 字，避免过长影响阅读体验。</span>
+                                    <span id="messageCount">0 / 500</span>
+                                </div>
+                            </div>
+
+                            <fieldset class="space-y-3">
+                                <legend class="text-sm font-semibold text-slate-800">选择背景风格</legend>
+                                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                    <button type="button"
+                                        class="bg-option ring-focus rounded-3xl border-2 border-love-primary bg-love-primary/10 p-3 text-left transition-colors duration-200 hover:border-love-primary"
+                                        data-bg="love-primary" aria-pressed="true">
+                                        <span class="block h-20 rounded-2xl bg-love-primary"></span>
+                                        <span class="mt-3 block text-sm font-semibold text-slate-800">经典粉</span>
+                                        <span class="text-xs text-slate-500">热烈且直接</span>
+                                    </button>
+                                    <button type="button"
+                                        class="bg-option ring-focus rounded-3xl border-2 border-slate-200 bg-love-secondary/10 p-3 text-left transition-colors duration-200 hover:border-love-primary"
+                                        data-bg="love-secondary" aria-pressed="false">
+                                        <span class="block h-20 rounded-2xl bg-love-secondary"></span>
+                                        <span class="mt-3 block text-sm font-semibold text-slate-800">浅粉</span>
+                                        <span class="text-xs text-slate-500">柔和与轻甜</span>
+                                    </button>
+                                    <button type="button"
+                                        class="bg-option ring-focus rounded-3xl border-2 border-slate-200 bg-love-accent/20 p-3 text-left transition-colors duration-200 hover:border-love-primary"
+                                        data-bg="love-accent" aria-pressed="false">
+                                        <span class="block h-20 rounded-2xl bg-love-accent"></span>
+                                        <span class="mt-3 block text-sm font-semibold text-slate-800">蜜桃粉</span>
+                                        <span class="text-xs text-slate-500">温柔与清新</span>
+                                    </button>
+                                    <button type="button"
+                                        class="bg-option ring-focus rounded-3xl border-2 border-slate-200 bg-love-dark/10 p-3 text-left transition-colors duration-200 hover:border-love-primary"
+                                        data-bg="love-dark" aria-pressed="false">
+                                        <span class="block h-20 rounded-2xl bg-love-dark"></span>
+                                        <span class="mt-3 block text-sm font-semibold text-slate-800">深粉</span>
+                                        <span class="text-xs text-slate-500">成熟与浓烈</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="bgColor" name="bgColor" value="love-primary">
+                            </fieldset>
+
+                            <div class="space-y-2.5">
+                                <label for="password" class="text-sm font-semibold text-slate-800">访问密码（选填）</label>
+                                <input type="password" id="password" name="password" autocomplete="new-password" maxlength="60"
+                                    class="ring-focus w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:border-love-primary"
+                                    placeholder="如果希望只给特定的人看，可以设置密码">
+                                <p class="text-sm leading-6 text-slate-500">密码不会展示在页面上，仅用于访问控制。</p>
+                            </div>
+
+                            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="text-sm leading-7 text-slate-500">
+                                    生成后即可复制链接、下载二维码并分享给 TA。
+                                </div>
+                                <button type="submit" id="generateBtn"
+                                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-love-primary px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-love-primary/25 transition-colors duration-200 hover:bg-love-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/35">
+                                    <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current" aria-hidden="true">
+                                        <path
+                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                    生成我的告白
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="loading" class="hidden flex-col items-center justify-center py-16 text-center">
+                            <div class="h-16 w-16 rounded-full border-4 border-love-primary/20 border-t-love-primary animate-spin"></div>
+                            <p class="mt-5 text-lg font-semibold text-love-primary">正在生成你的告白页面…</p>
+                            <p class="mt-2 text-sm text-slate-500">通常只需要几秒钟，请稍候。</p>
+                        </div>
+
+                        <div id="result" class="hidden pt-8">
+                            <div class="mb-8 flex flex-col gap-2 text-center sm:text-left">
+                                <span class="section-label mx-auto sm:mx-0">Ready to share</span>
+                                <h3 class="text-3xl font-romantic font-bold text-love-ink">告白已生成</h3>
+                                <p class="text-slate-600">复制链接、展示二维码，或者直接分享到常用平台。</p>
+                            </div>
+
+                            <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+                                <section class="rounded-[1.75rem] border border-rose-100 bg-white p-6 shadow-soft">
+                                    <div class="mb-4 flex items-center gap-3">
+                                        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-love-primary/10 text-love-primary">
+                                            <svg viewBox="0 0 24 24" class="h-6 w-6 stroke-current" fill="none" stroke-width="1.8"
+                                                aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 3h6M9 21h6M5 9h4v4H5V9Zm10 0h4v4h-4V9ZM5 15h4v4H5v-4Zm10 2h2m2 0h.01M15 5h4v4h-4V5Z" />
+                                            </svg>
+                                        </span>
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-slate-900">分享二维码</h4>
+                                            <p class="text-sm text-slate-500">手机扫码即可打开页面</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center rounded-[1.5rem] bg-love-light p-5">
+                                        <div id="qrcode" class="flex min-h-[288px] w-full items-center justify-center rounded-[1.25rem] bg-white p-4 shadow-sm"></div>
+                                        <button id="downloadQrBtn" type="button"
+                                            class="mt-5 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-love-primary/15 bg-love-primary px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-love-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/35">
+                                            <svg viewBox="0 0 24 24" class="h-5 w-5 stroke-current" fill="none" stroke-width="1.8"
+                                                aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
+                                            </svg>
+                                            下载二维码
+                                        </button>
+                                    </div>
+                                </section>
+
+                                <section class="rounded-[1.75rem] border border-rose-100 bg-white p-6 shadow-soft">
+                                    <div class="mb-4 flex items-center gap-3">
+                                        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-love-primary/10 text-love-primary">
+                                            <svg viewBox="0 0 24 24" class="h-6 w-6 stroke-current" fill="none" stroke-width="1.8"
+                                                aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M10 14 21 3m0 0h-7m7 0v7M14 10 3 21m0 0h7m-7 0v-7" />
+                                            </svg>
+                                        </span>
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-slate-900">告白链接</h4>
+                                            <p class="text-sm text-slate-500">一键复制，更适合发给对方</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="rounded-[1.5rem] bg-love-light p-4">
+                                        <label for="shareLink" class="mb-2 block text-sm font-medium text-slate-700">生成后的访问地址</label>
+                                        <div class="relative">
+                                            <input type="text" id="shareLink" readonly
+                                                class="ring-focus w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 pr-32 text-slate-800"
+                                                placeholder="生成的链接将显示在这里">
+                                            <button id="copyLinkBtn" type="button"
+                                                class="absolute right-2 top-1/2 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center gap-2 rounded-full bg-love-primary px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-love-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/35">
+                                                <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" stroke-width="1.8"
+                                                    aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M9 9h10v10H9zM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" />
+                                                </svg>
+                                                复制
+                                            </button>
+                                        </div>
+                                        <div id="copyStatus" class="mt-3 hidden rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+                                            链接已复制到剪贴板。
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-6 space-y-3">
+                                        <p class="text-sm font-semibold text-slate-700">分享到社交平台</p>
+                                        <div class="flex flex-wrap gap-3">
+                                            <a href="#" id="shareWeibo"
+                                                class="icon-btn inline-flex cursor-pointer items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                                <span class="h-2.5 w-2.5 rounded-full bg-[#E6162D]"></span> 微博
+                                            </a>
+                                            <a href="#" id="shareWechat"
+                                                class="icon-btn inline-flex cursor-pointer items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                                <span class="h-2.5 w-2.5 rounded-full bg-[#07C160]"></span> 微信
+                                            </a>
+                                            <a href="#" id="shareQQ"
+                                                class="icon-btn inline-flex cursor-pointer items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                                <span class="h-2.5 w-2.5 rounded-full bg-[#12B7F5]"></span> QQ
+                                            </a>
+                                            <a href="#" id="shareEmail"
+                                                class="icon-btn inline-flex cursor-pointer items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                                <span class="h-2.5 w-2.5 rounded-full bg-[#FF7600]"></span> 邮件
+                                            </a>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="glass-panel rounded-[2rem] p-6 shadow-romantic md:p-8">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-love-primary/80">Tips</p>
+                        <h3 class="mt-3 text-2xl font-semibold text-slate-900">让告白更打动人的 3 个小建议</h3>
+                        <div class="mt-6 space-y-4 text-sm leading-7 text-slate-600">
+                            <div class="rounded-3xl bg-white/88 p-4">
+                                <p class="font-semibold text-slate-900">1. 写具体画面</p>
+                                <p class="mt-1">比起“我很喜欢你”，更打动人的是“你笑的时候，我总会不自觉想靠近”。</p>
+                            </div>
+                            <div class="rounded-3xl bg-white/88 p-4">
+                                <p class="font-semibold text-slate-900">2. 控制篇幅</p>
+                                <p class="mt-1">页面适合短中段落，留白会让文字显得更高级，也更容易读完。</p>
+                            </div>
+                            <div class="rounded-3xl bg-white/88 p-4">
+                                <p class="font-semibold text-slate-900">3. 分享有节奏</p>
+                                <p class="mt-1">先发一句引导语，再附上链接或二维码，会更有悬念与仪式感。</p>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="px-4 py-20 md:px-6">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-12 text-center">
+                    <span class="section-label">Inspiration</span>
+                    <h2 class="mt-4 text-[clamp(2.2rem,4vw,3.25rem)] font-romantic font-bold text-love-ink">告白示例</h2>
+                    <p class="mx-auto mt-4 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
+                        从热烈、温柔到坚定承诺，选择最接近你心意的表达方式。
+                    </p>
+                </div>
+
+                <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    <article
+                        class="example-card glass-panel overflow-hidden rounded-[1.75rem] border border-white/90 shadow-soft transition-shadow duration-200">
+                        <div class="relative overflow-hidden bg-love-primary px-6 py-8 text-white">
+                            <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/15 blur-2xl"></div>
+                            <div class="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-white/15 blur-2xl"></div>
+                            <p class="text-sm uppercase tracking-[0.24em] text-white/75">Example 01</p>
+                            <h3 class="mt-4 text-4xl font-romantic font-bold">致我最爱的人</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-sm leading-7 text-slate-600">遇见你是我生命里最温柔的意外。每次看到你，我都会再次确认，喜欢原来真的会让日子发光。</p>
+                            <div class="mt-6 flex items-center justify-between gap-4">
+                                <span class="text-sm font-semibold text-love-primary">来自：匿名</span>
+                                <a href="view.php?example=1"
+                                    class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-love-primary/15 px-4 py-2 text-sm font-semibold text-love-dark transition-colors duration-200 hover:border-love-primary/35 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                    查看详情
+                                    <svg viewBox="0 0 24 24" class="example-arrow h-4 w-4 stroke-current transition-transform duration-200"
+                                        fill="none" stroke-width="1.8" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article
+                        class="example-card glass-panel overflow-hidden rounded-[1.75rem] border border-white/90 shadow-soft transition-shadow duration-200">
+                        <div class="relative overflow-hidden bg-love-secondary px-6 py-8 text-white">
+                            <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/15 blur-2xl"></div>
+                            <div class="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-white/15 blur-2xl"></div>
+                            <p class="text-sm uppercase tracking-[0.24em] text-white/75">Example 02</p>
+                            <h3 class="mt-4 text-4xl font-romantic font-bold">宝贝，我爱你</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-sm leading-7 text-slate-600">从相识到现在，你给我的每一次回应、每一个笑容，都在把我慢慢变成更勇敢也更温柔的人。</p>
+                            <div class="mt-6 flex items-center justify-between gap-4">
+                                <span class="text-sm font-semibold text-love-primary">来自：小明</span>
+                                <a href="view.php?example=2"
+                                    class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-love-primary/15 px-4 py-2 text-sm font-semibold text-love-dark transition-colors duration-200 hover:border-love-primary/35 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                    查看详情
+                                    <svg viewBox="0 0 24 24" class="example-arrow h-4 w-4 stroke-current transition-transform duration-200"
+                                        fill="none" stroke-width="1.8" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article
+                        class="example-card glass-panel overflow-hidden rounded-[1.75rem] border border-white/90 shadow-soft transition-shadow duration-200">
+                        <div class="relative overflow-hidden bg-love-dark px-6 py-8 text-white">
+                            <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/15 blur-2xl"></div>
+                            <div class="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-white/15 blur-2xl"></div>
+                            <p class="text-sm uppercase tracking-[0.24em] text-white/75">Example 03</p>
+                            <h3 class="mt-4 text-4xl font-romantic font-bold">永恒的承诺</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-sm leading-7 text-slate-600">如果爱有答案，那一定是一次次选择靠近你、理解你、陪你把普通日子也过成值得纪念的时刻。</p>
+                            <div class="mt-6 flex items-center justify-between gap-4">
+                                <span class="text-sm font-semibold text-love-primary">来自：未知</span>
+                                <a href="view.php?example=3"
+                                    class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-love-primary/15 px-4 py-2 text-sm font-semibold text-love-dark transition-colors duration-200 hover:border-love-primary/35 hover:text-love-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-love-primary/30">
+                                    查看详情
+                                    <svg viewBox="0 0 24 24" class="example-arrow h-4 w-4 stroke-current transition-transform duration-200"
+                                        fill="none" stroke-width="1.8" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="px-4 py-20 md:px-6">
+            <div class="mx-auto max-w-7xl rounded-[2rem] border border-white/80 bg-white/82 p-6 shadow-romantic backdrop-blur-xl md:p-10">
+                <div class="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+                    <div>
+                        <span class="section-label">About LoveWeb</span>
+                        <h2 class="mt-4 text-[clamp(2.2rem,4vw,3.2rem)] font-romantic font-bold text-love-ink">关于我们</h2>
+                        <p class="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
+                            爱在指尖希望把“想说的话”变成更体面的表达方式。你不需要复杂操作，也不需要懂设计，只需要认真写下你的心意。
+                        </p>
+
+                        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                            <div class="rounded-3xl bg-love-light p-5">
+                                <h3 class="text-lg font-semibold text-slate-900">为什么选择我们</h3>
+                                <ul class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
+                                    <li>• 轻盈浪漫的页面结构，分享出去更有质感</li>
+                                    <li>• 支持二维码、链接与密码保护</li>
+                                    <li>• 响应式布局，手机和桌面都好看</li>
+                                </ul>
+                            </div>
+                            <div class="rounded-3xl bg-love-light p-5">
+                                <h3 class="text-lg font-semibold text-slate-900">用户反馈</h3>
+                                <blockquote class="mt-4 text-sm leading-7 text-slate-600">
+                                    “我只是想认真表达喜欢，结果这个页面替我把氛围也一起准备好了。”
+                                </blockquote>
+                                <p class="mt-4 text-sm font-semibold text-love-primary">— 一位成功告白的用户</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-love-primary via-love-secondary to-love-dark p-8 text-white shadow-lg">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,.28),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,.18),transparent_28%)]"></div>
+                        <div class="relative">
+                            <p class="text-sm uppercase tracking-[0.28em] text-white/75">Promise</p>
+                            <h3 class="mt-4 text-5xl font-romantic font-bold">让爱意有落点</h3>
+                            <p class="mt-5 max-w-xl text-sm leading-8 text-white/88 md:text-base">
+                                一份好的告白，不只是文字漂亮，而是让对方在打开页面的那一刻，感受到“这份心意是认真准备过的”。
+                            </p>
+                            <div class="mt-10 rounded-[1.5rem] bg-white/12 p-5 backdrop-blur-sm">
+                                <p class="text-sm leading-7 text-white/85">
+                                    仪式感不是昂贵，而是你愿意为一句喜欢多花一点心思。我们负责把这点心思呈现得更完整。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="px-4 pb-10 pt-4 md:px-6">
+        <div class="glass-panel mx-auto flex max-w-7xl flex-col gap-5 rounded-[2rem] px-6 py-6 shadow-soft md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-lg font-bold text-love-ink">爱在指尖</p>
+                <p class="mt-1 text-sm text-slate-500">把一句喜欢，做成一页心动。</p>
+            </div>
+            <div class="flex flex-wrap gap-4 text-sm font-medium text-slate-600">
+                <a href="#home" class="transition-colors duration-200 hover:text-love-primary">首页</a>
+                <a href="#create" class="transition-colors duration-200 hover:text-love-primary">创建告白</a>
+                <a href="#examples" class="transition-colors duration-200 hover:text-love-primary">灵感示例</a>
+                <a href="#about" class="transition-colors duration-200 hover:text-love-primary">关于</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const playMusicBtn = document.getElementById('playMusic');
+        const audio = document.getElementById('music');
+        const messageField = document.getElementById('message');
+        const messageCount = document.getElementById('messageCount');
+        const confessionForm = document.getElementById('confessionForm');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const qrcodeElement = document.getElementById('qrcode');
+        const shareLink = document.getElementById('shareLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const copyStatus = document.getElementById('copyStatus');
+        const downloadQrBtn = document.getElementById('downloadQrBtn');
+        const bgOptions = document.querySelectorAll('.bg-option');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let heartTimer = null;
+
+        function updateNavbarState() {
+            if (window.scrollY > 24) {
+                navbar.classList.add('shadow-romantic');
+                navbar.classList.remove('shadow-soft');
+            } else {
+                navbar.classList.add('shadow-soft');
+                navbar.classList.remove('shadow-romantic');
+            }
+        }
+
+        function toggleMobileMenu(forceOpen) {
+            const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden', !shouldOpen);
+            menuBtn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        }
+
+        function updateMessageCount() {
+            messageCount.textContent = `${messageField.value.length} / 500`;
+        }
+
+        function setSelectedBackground(value) {
+            bgOptions.forEach((option) => {
+                const selected = option.dataset.bg === value;
+                option.setAttribute('aria-pressed', selected ? 'true' : 'false');
+                option.classList.toggle('border-love-primary', selected);
+                option.classList.toggle('border-slate-200', !selected);
+            });
+            document.getElementById('bgColor').value = value;
+        }
+
+        function createHeart() {
+            if (prefersReducedMotion.matches) {
+                return;
+            }
+            const container = document.getElementById('heartContainer');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.bottom = '-24px';
+            heart.style.setProperty('--drift', `${(Math.random() * 120 - 60).toFixed(2)}px`);
+            heart.style.animationDuration = `${(4.8 + Math.random() * 2).toFixed(2)}s`;
+            heart.style.opacity = String(0.35 + Math.random() * 0.35);
+            container.appendChild(heart);
+            window.setTimeout(() => heart.remove(), 7000);
+        }
+
+        function startHearts() {
+            if (prefersReducedMotion.matches || heartTimer) {
+                return;
+            }
+            heartTimer = window.setInterval(createHeart, 360);
+            for (let index = 0; index < 8; index += 1) {
+                window.setTimeout(createHeart, index * 120);
+            }
+        }
+
+        function stopHearts() {
+            if (heartTimer) {
+                window.clearInterval(heartTimer);
+                heartTimer = null;
+            }
+        }
+
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.cn/?format=json');
+                if (!response.ok) {
+                    throw new Error('IP service unavailable');
+                }
+                const data = await response.json();
+                return data.ip || '';
+            } catch {
+                return '';
+            }
+        }
+
+        function resetQRCode() {
+            qrcodeElement.innerHTML = '';
+            qrcodeElement.classList.remove('border', 'border-dashed', 'border-love-primary/30', 'bg-love-blush/70');
+        }
+
+        function renderQRCodeFallback(url) {
+            qrcodeElement.classList.add('border', 'border-dashed', 'border-love-primary/30', 'bg-love-blush/70');
+            qrcodeElement.innerHTML = `
+                <div class="flex flex-col items-center gap-3 px-4 py-6 text-center text-love-ink">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-love-primary/10 text-love-primary">
+                        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 15h1.5m1.5 0H19.5M15 18h4.5" />
+                        </svg>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-semibold text-slate-900">二维码服务暂时不可用</p>
+                        <p class="text-xs leading-6 text-slate-600">你仍然可以复制下方链接直接分享给对方打开。</p>
+                    </div>
+                    <p class="max-w-full break-all rounded-2xl bg-white px-4 py-3 text-xs text-slate-600 shadow-soft">${url}</p>
+                </div>
+            `;
+        }
+
+        function renderQRCode(url) {
+            resetQRCode();
+            if (typeof window.QRCode !== 'function') {
+                renderQRCodeFallback(url);
+                return false;
+            }
+            new window.QRCode(qrcodeElement, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark: '#C2185B',
+                colorLight: '#ffffff',
+                correctLevel: window.QRCode.CorrectLevel.H
+            });
+            return true;
+        }
+
+        function showCopyStatus(message = '链接已复制到剪贴板。') {
+            copyStatus.textContent = message;
+            copyStatus.classList.remove('hidden');
+            window.setTimeout(() => {
+                copyStatus.classList.add('hidden');
+            }, 2200);
+        }
+
+        async function copyToClipboard(text) {
+            if (!text) {
+                throw new Error('没有可复制的链接');
+            }
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(text);
+                return;
+            }
+            shareLink.removeAttribute('readonly');
+            shareLink.select();
+            document.execCommand('copy');
+            shareLink.setAttribute('readonly', 'readonly');
+        }
+
+        function setShareLinks(url) {
+            const encodedUrl = encodeURIComponent(url);
+            const title = encodeURIComponent('我收到了一份来自"爱在指尖"的浪漫告白，快来看看吧！');
+            document.getElementById('shareWeibo').href = `https://service.weibo.com/share/share.php?url=${encodedUrl}&title=${title}`;
+            document.getElementById('shareQQ').href = `https://connect.qq.com/widget/shareqq/index.html?url=${encodedUrl}&title=${title}&source=${encodeURIComponent('爱在指尖')}`;
+            document.getElementById('shareEmail').href = `mailto:?subject=${encodeURIComponent('来自"爱在指尖"的浪漫告白')}&body=${encodeURIComponent(`我收到了一份来自"爱在指尖"的浪漫告白，快来看看吧！ ${url}`)}`;
+        }
+
+        window.addEventListener('scroll', updateNavbarState);
+        updateNavbarState();
+
+        menuBtn.addEventListener('click', () => toggleMobileMenu());
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener('click', (event) => {
+                const targetSelector = anchor.getAttribute('href');
+                const target = document.querySelector(targetSelector);
+                if (!target) {
+                    return;
+                }
+                event.preventDefault();
+                target.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+                toggleMobileMenu(false);
+            });
+        });
+
+        playMusicBtn.addEventListener('click', async () => {
+            try {
+                if (audio.paused) {
+                    await audio.play();
+                    playMusicBtn.lastChild.textContent = ' 暂停音乐';
+                } else {
+                    audio.pause();
+                    playMusicBtn.lastChild.textContent = ' 播放音乐';
+                }
+            } catch {
+                alert('当前设备阻止了自动播放，请手动允许音频播放。');
+            }
+        });
+
+        messageField.addEventListener('input', updateMessageCount);
+        updateMessageCount();
+
+        bgOptions.forEach((option) => {
+            option.addEventListener('click', () => setSelectedBackground(option.dataset.bg));
+        });
+        setSelectedBackground('love-primary');
+
+        document.getElementById('shareWechat').addEventListener('click', (event) => {
+            event.preventDefault();
+            const value = shareLink.value.trim();
+            if (value) {
+                alert('链接已生成，请复制链接后发送到微信，或直接让对方扫码查看。');
+            }
+        });
+
+        confessionForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!confessionForm.reportValidity()) {
+                return;
+            }
+
+            confessionForm.classList.add('hidden');
+            loading.classList.remove('hidden');
+            result.classList.add('hidden');
+
+            try {
+                const formData = new FormData(confessionForm);
+                const confessionData = {
+                    recipient: String(formData.get('recipient') || '').trim(),
+                    sender: String(formData.get('sender') || '').trim(),
+                    message: String(formData.get('message') || '').trim(),
+                    bgColor: String(formData.get('bgColor') || 'love-primary'),
+                    password: String(formData.get('password') || ''),
+                    ip: await getIP()
+                };
+
+                const response = await fetch('save.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(confessionData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`服务器响应错误：${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.success || !data.url) {
+                    throw new Error(data.error || '生成告白失败，请稍后重试。');
+                }
+
+                shareLink.value = data.url;
+                renderQRCode(data.url);
+                setShareLinks(data.url);
+
+                loading.classList.add('hidden');
+                result.classList.remove('hidden');
+                result.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+            } catch (error) {
+                loading.classList.add('hidden');
+                confessionForm.classList.remove('hidden');
+                alert(error instanceof Error ? error.message : '生成失败，请稍后重试。');
+            }
+        });
+
+        copyLinkBtn.addEventListener('click', async () => {
+            try {
+                await copyToClipboard(shareLink.value.trim());
+                showCopyStatus();
+            } catch (error) {
+                alert(error instanceof Error ? error.message : '复制失败，请手动复制链接。');
+            }
+        });
+
+        downloadQrBtn.addEventListener('click', () => {
+            const canvas = qrcodeElement.querySelector('canvas');
+            if (!canvas) {
+                alert('请先生成告白，再下载二维码。');
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = 'loveweb-qrcode.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        prefersReducedMotion.addEventListener?.('change', () => {
+            if (prefersReducedMotion.matches) {
+                stopHearts();
+            } else {
+                startHearts();
+            }
+        });
+        startHearts();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>LoveWeb View Smoke Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 24px; line-height: 1.6; }
+        .pass { color: #15803d; }
+        .fail { color: #b91c1c; }
+        code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <h1>LoveWeb View Smoke Test</h1>
+    <p>Open this file in a browser or static server root. It validates key regression points in <code>view.php</code>.</p>
+    <ul id="results"></ul>
+
+    <script>
+        const results = document.getElementById('results');
+
+        function addResult(ok, message) {
+            const li = document.createElement('li');
+            li.className = ok ? 'pass' : 'fail';
+            li.textContent = `${ok ? 'PASS' : 'FAIL'} - ${message}`;
+            results.appendChild(li);
+        }
+
+        async function run() {
+            try {
+                const response = await fetch('./view.php?example=1');
+                const html = await response.text();
+                addResult(response.ok, 'view.php example page responds successfully');
+                addResult(html.includes('id="shareLink"'), 'share link input exists');
+                addResult(html.includes('id="copyLinkBtn"'), 'copy button exists');
+                addResult(html.includes('id="heartContainer"'), 'heart particle container exists');
+                addResult(html.includes('navigator.clipboard') || html.includes('document.execCommand'), 'copy logic exists');
+                addResult(html.includes('setTimeout(() => heart.remove(), 7000)'), 'heart cleanup timeout is bounded');
+                addResult(!html.includes('font-awesome'), 'font awesome dependency removed');
+                addResult(!html.includes('hover:-translate-y-1'), 'unstable hover translate classes removed');
+                addResult(html.includes('top-4'), 'floating navigation spacing is present');
+                addResult(html.includes('viewBox="0 0 24 24"'), 'inline svg icon system is present');
+            } catch (error) {
+                addResult(false, `test execution failed: ${error.message}`);
+            }
+        }
+
+        run();
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>LoveWeb Save Smoke Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 24px; line-height: 1.6; }
+        .pass { color: #15803d; }
+        .fail { color: #b91c1c; }
+        code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <h1>LoveWeb Save Smoke Test</h1>
+    <p>This file statically verifies that <code>save.php</code> returns the current <code>view.php?id=...</code> route.</p>
+    <ul id="results"></ul>
+
+    <script>
+        const results = document.getElementById('results');
+
+        function addResult(ok, message) {
+            const li = document.createElement('li');
+            li.className = ok ? 'pass' : 'fail';
+            li.textContent = `${ok ? 'PASS' : 'FAIL'} - ${message}`;
+            results.appendChild(li);
+        }
+
+        async function run() {
+            try {
+                const response = await fetch('./save.php');
+                const phpSource = await response.text();
+                addResult(phpSource.includes('function buildConfessionUrl($id)'), 'save.php defines a URL builder helper');
+                addResult(phpSource.includes('view.php?id=%s'), 'share URL points to view.php?id=...');
+                addResult(!phpSource.includes("$_SERVER['HTTP_ORIGIN']"), 'HTTP_ORIGIN dependency removed');
+                addResult(!phpSource.includes('/message/'), 'obsolete /message route removed');
+            } catch (error) {
+                addResult(false, `test execution failed: ${error.message}`);
+            }
+        }
+
+        run();
+    </script>
+</body>
+</html>

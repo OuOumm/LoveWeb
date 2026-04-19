@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - 爱在指尖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        love: {
+                            primary: '#FF4B91',
+                            secondary: '#FF85B3',
+                            accent: '#FFC1D6',
+                            blush: '#FFF3F8',
+                            light: '#FFF7FB',
+                            dark: '#C2185B',
+                            ink: '#3D1631'
+                        }
+                    },
+                    boxShadow: {
+                        romantic: '0 20px 60px rgba(255, 75, 145, 0.16)',
+                        soft: '0 10px 30px rgba(148, 163, 184, 0.14)'
+                    },
+                    fontFamily: {
+                        romantic: ['Dancing Script', 'cursive'],
+                        sans: ['"Inter"', '"PingFang SC"', '"Microsoft YaHei"', 'sans-serif']
+                    },
+                    animation: {
+                        float: 'float 4s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(255, 193, 214, 0.65), transparent 28%),
+                radial-gradient(circle at top right, rgba(255, 133, 179, 0.24), transparent 24%),
+                linear-gradient(180deg, #fff8fb 0%, #fff4f8 42%, #fffdfd 100%);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.84);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-sans text-slate-900 overflow-x-hidden">
+    <main class="flex min-h-screen items-center justify-center px-4 py-10">
+        <section class="glass-panel w-full max-w-xl rounded-[2rem] p-8 text-center shadow-romantic sm:p-12">
+            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-love-primary/10 text-love-primary animate-float">
+                <svg viewBox="0 0 24 24" class="h-10 w-10 fill-current" aria-hidden="true">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+            </div>
+            <h1 class="mt-6 text-3xl font-extrabold tracking-tight text-love-ink sm:text-4xl">抱歉，页面未找到</h1>
+            <p class="mt-4 text-base leading-7 text-slate-600 sm:text-lg">可能是链接已失效或输入有误，可以返回首页重新开始。</p>
+            <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a href="/index.html"
+                    class="inline-flex items-center justify-center gap-2 rounded-full bg-love-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-love-primary/25 transition-colors duration-200 hover:bg-love-dark">
+                    <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" stroke-width="1.8"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4.5 9.75V19.5A2.25 2.25 0 006.75 21.75h10.5a2.25 2.25 0 002.25-2.25V9.75" />
+                    </svg>
+                    返回首页
+                </a>
+                <button type="button" onclick="history.back()"
+                    class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-soft transition-colors duration-200 hover:border-love-primary/40 hover:text-love-dark">
+                    <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" stroke-width="1.8"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    返回上一页
+                </button>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
