@@ -1,6 +1,8 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 
+require_once __DIR__ . '/template-registry.php';
+
 function hexToLightenColor($hex, $percent) {
     $hex = str_replace('#', '', $hex);
     $r = hexdec(substr($hex, 0, 2));
@@ -179,7 +181,50 @@ function renderAppShellEnd() {
 <?php
 }
 
-$id = isset($_GET['id']) ? trim($_GET['id']) : '';
+function loadTemplateConfig($templateName) {
+    $template = resolveTemplate($templateName);
+    if ($template === null) {
+        return [
+            'templateName' => 'default',
+            'config' => []
+        ];
+    }
+
+    $config = is_file($template['configPath']) ? require $template['configPath'] : [];
+    return [
+        'templateName' => $template['key'],
+        'config' => is_array($config) ? $config : []
+    ];
+}
+
+function loadTemplateHtml($templateName) {
+    $template = resolveTemplate($templateName);
+    if ($template === null) {
+        return '';
+    }
+
+    return is_file($template['templatePath']) ? (string) file_get_contents($template['templatePath']) : '';
+}
+
+function renderTemplateHtml($templateHtml, array $variables) {
+    $rendered = preg_replace_callback('/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/', function ($matches) use ($variables) {
+        $key = $matches[1];
+        return array_key_exists($key, $variables) ? (string) $variables[$key] : '';
+    }, $templateHtml);
+
+    return $rendered ?? '';
+}
+
+function buildCurrentUrl() {
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && (string) $_SERVER['SERVER_PORT'] === '443');
+    $scheme = $https ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ?? 'localhost');
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '/view.php';
+
+    return $scheme . '://' . $host . $requestUri;
+}
+
+$id = isset($_GET['id']) ? trim((string) $_GET['id']) : '';
 $example = isset($_GET['example']) ? intval($_GET['example']) : 0;
 
 if ($id === '' && $example === 0) {
@@ -201,6 +246,7 @@ if ($id !== '') {
             'sender' => '爱你的人',
             'message' => '遇见你是最美丽的意外。每一天爱你都比昨天更多一点。愿我们的爱情像星辰一样永恒，像花朵一样绽放。',
             'bgColor' => 'love-primary',
+            'template' => 'default',
             'timestamp' => date('Y-m-d H:i:s')
         ],
         2 => [
@@ -208,6 +254,7 @@ if ($id !== '') {
             'sender' => '小明',
             'message' => '从相识的那一刻起，我的心就被你占据。你的笑容是我每天最期待的阳光，你的陪伴是我最大的幸福。感谢你出现在我的生命里，让我明白了爱的真谛。',
             'bgColor' => 'love-secondary',
+            'template' => 'romantic',
             'timestamp' => date('Y-m-d H:i:s')
         ],
         3 => [
@@ -215,6 +262,7 @@ if ($id !== '') {
             'sender' => '未知',
             'message' => '我承诺，无论顺境还是逆境，无论富裕还是贫穷，无论健康还是疾病，我都会永远爱你、珍惜你，直到永远。这份爱不会因时间褪色，不会因距离改变。',
             'bgColor' => 'love-dark',
+            'template' => 'default',
             'timestamp' => date('Y-m-d H:i:s')
         ]
     ];
@@ -337,278 +385,45 @@ $bgColorKey = (string) ($confession['bgColor'] ?? 'love-primary');
 $bgColor = $bgColors[$bgColorKey] ?? $bgColors['love-primary'];
 $bgColorLight = hexToLightenColor($bgColor, 0.9);
 $displayDate = !empty($confession['timestamp']) ? date('Y年m月d日', strtotime((string) $confession['timestamp'])) : date('Y年m月d日');
-$pageTitle = sprintf('%s，来自%s的一封信 - 爱在指尖', (string) ($confession['recipient'] ?? '亲爱的'), (string) ($confession['sender'] ?? '匿名')); 
+$pageTitle = sprintf('%s，来自%s的一封信 - 爱在指尖', (string) ($confession['recipient'] ?? '亲爱的'), (string) ($confession['sender'] ?? '匿名'));
 $messageHtml = nl2br(htmlspecialchars((string) ($confession['message'] ?? ''), ENT_QUOTES, 'UTF-8'));
+$templateInfo = loadTemplateConfig($confession['template'] ?? 'default');
+$templateConfig = $templateInfo['config'];
+$templateHtml = loadTemplateHtml($templateInfo['templateName']);
+$currentUrl = buildCurrentUrl();
+
+$pageVariables = [
+    'pageTitle' => htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'),
+    'recipient' => htmlspecialchars((string) ($confession['recipient'] ?? '亲爱的'), ENT_QUOTES, 'UTF-8'),
+    'sender' => htmlspecialchars((string) ($confession['sender'] ?? '匿名'), ENT_QUOTES, 'UTF-8'),
+    'messageHtml' => $messageHtml,
+    'displayDate' => htmlspecialchars($displayDate, ENT_QUOTES, 'UTF-8'),
+    'bgColor' => htmlspecialchars($bgColor, ENT_QUOTES, 'UTF-8'),
+    'bgColorLight' => htmlspecialchars($bgColorLight, ENT_QUOTES, 'UTF-8'),
+    'currentUrl' => htmlspecialchars($currentUrl, ENT_QUOTES, 'UTF-8'),
+    'shareTitle' => htmlspecialchars((string) ($templateConfig['shareTitle'] ?? '继续分享这份爱意'), ENT_QUOTES, 'UTF-8'),
+    'shareDescription' => htmlspecialchars((string) ($templateConfig['shareDescription'] ?? '复制当前链接，或通过常用渠道把这封信继续传递给对方与朋友。'), ENT_QUOTES, 'UTF-8'),
+    'heroEyebrow' => htmlspecialchars((string) ($templateConfig['heroEyebrow'] ?? '专属告白已送达'), ENT_QUOTES, 'UTF-8'),
+    'letterIntro' => htmlspecialchars((string) ($templateConfig['letterIntro'] ?? '每一句认真书写的话，都值得被郑重地阅读、保存和分享。'), ENT_QUOTES, 'UTF-8'),
+    'securityTitle' => htmlspecialchars((string) ($templateConfig['securityTitle'] ?? '安全查看说明'), ENT_QUOTES, 'UTF-8'),
+    'musicButtonText' => htmlspecialchars((string) ($templateConfig['musicButtonText'] ?? '播放音乐'), ENT_QUOTES, 'UTF-8'),
+    'musicHint' => htmlspecialchars((string) ($templateConfig['musicHint'] ?? '如果浏览器阻止自动播放，可以点击上方按钮手动开启或暂停背景音乐。'), ENT_QUOTES, 'UTF-8'),
+    'musicUrl' => htmlspecialchars((string) ($templateConfig['musicUrl'] ?? ''), ENT_QUOTES, 'UTF-8'),
+    'iconHeart' => renderIcon('heart', 'h-5 w-5'),
+    'iconArrowLeft' => renderIcon('arrow-left', 'h-4 w-4'),
+    'iconSparkles' => renderIcon('sparkles', 'h-4 w-4'),
+    'iconCalendar' => renderIcon('calendar', 'h-4 w-4 text-love-primary'),
+    'iconQuoteLeft' => renderIcon('quote-left', 'h-10 w-10'),
+    'iconQuoteRight' => renderIcon('quote-right', 'h-10 w-10'),
+    'iconCopy' => renderIcon('copy', 'h-4 w-4'),
+    'iconWeibo' => renderIcon('weibo', 'h-5 w-5'),
+    'iconWechat' => renderIcon('wechat', 'h-5 w-5'),
+    'iconQQ' => renderIcon('qq', 'h-5 w-5'),
+    'iconEmail' => renderIcon('email', 'h-5 w-5'),
+    'iconShieldCheck' => renderIcon('shield-check', 'h-4 w-4'),
+    'iconMusicNote' => renderIcon('music-note', 'h-5 w-5')
+];
 
 renderAppShellStart($pageTitle);
-?>
-<main class="relative isolate min-h-screen px-4 pb-12 pt-24 sm:px-6 lg:px-8">
-    <div class="hero-orb left-[-4rem] top-[10rem] h-52 w-52" style="background: <?php echo htmlspecialchars($bgColorLight, ENT_QUOTES, 'UTF-8'); ?>;"></div>
-    <div class="hero-orb right-[-5rem] top-[16rem] h-64 w-64" style="background: <?php echo htmlspecialchars($bgColor, ENT_QUOTES, 'UTF-8'); ?>33;"></div>
-    <div id="heartContainer" aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 overflow-hidden"></div>
-
-    <header class="fixed inset-x-4 top-4 z-30 mx-auto w-auto max-w-6xl rounded-full border border-white/70 bg-white/88 px-4 py-3 shadow-soft backdrop-blur-xl sm:px-6">
-        <div class="flex items-center justify-between gap-4">
-            <a href="/index.html" class="ring-focus inline-flex items-center gap-3 rounded-full text-sm font-semibold text-slate-900 transition-colors duration-200 hover:text-love-primary cursor-pointer">
-                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-love-primary/10 text-love-primary">
-                    <?php echo renderIcon('heart', 'h-5 w-5'); ?>
-                </span>
-                <span>爱在指尖</span>
-            </a>
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button type="button" onclick="history.back()" class="ring-focus inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:border-love-primary/40 hover:text-love-dark cursor-pointer">
-                    <?php echo renderIcon('arrow-left', 'h-4 w-4'); ?>
-                    <span class="hidden sm:inline">返回</span>
-                </button>
-                <a href="/index.html#generator" class="ring-focus inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-love-primary px-4 py-2 text-sm font-semibold text-white shadow-romantic transition-colors duration-200 hover:bg-love-dark cursor-pointer">
-                    <?php echo renderIcon('sparkles', 'h-4 w-4'); ?>
-                    再写一封
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <section class="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-8 pt-10 lg:flex-row lg:items-start">
-        <div class="w-full lg:max-w-[minmax(0,1fr)] lg:flex-1">
-            <div class="glass-panel overflow-hidden rounded-[2rem] shadow-romantic">
-                <div class="relative overflow-hidden px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10" style="background: linear-gradient(135deg, <?php echo htmlspecialchars($bgColorLight, ENT_QUOTES, 'UTF-8'); ?> 0%, #ffffff 55%, rgba(255,255,255,0.96) 100%);">
-                    <div class="paper-grid absolute inset-0 opacity-60"></div>
-                    <div class="relative z-10 flex flex-col gap-8">
-                        <div class="flex flex-wrap items-start justify-between gap-4">
-                            <div>
-                                <p class="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-love-dark shadow-soft">
-                                    <?php echo renderIcon('sparkles', 'h-4 w-4'); ?>
-                                    专属告白已送达
-                                </p>
-                                <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                                    <?php echo htmlspecialchars((string) ($confession['recipient'] ?? '亲爱的'), ENT_QUOTES, 'UTF-8'); ?>，这是写给你的信
-                                </h1>
-                                <p class="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-                                    每一句认真书写的话，都值得被郑重地阅读、保存和分享。
-                                </p>
-                            </div>
-                            <div class="rounded-3xl border border-white/80 bg-white/90 px-4 py-4 shadow-soft sm:min-w-52">
-                                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">发送信息</p>
-                                <div class="mt-3 space-y-3">
-                                    <div>
-                                        <p class="text-xs text-slate-500">来自</p>
-                                        <p class="text-base font-semibold text-slate-900">—— <?php echo htmlspecialchars((string) ($confession['sender'] ?? '匿名'), ENT_QUOTES, 'UTF-8'); ?></p>
-                                    </div>
-                                    <div class="inline-flex items-center gap-2 text-sm text-slate-600">
-                                        <?php echo renderIcon('calendar', 'h-4 w-4 text-love-primary'); ?>
-                                        <span><?php echo htmlspecialchars($displayDate, ENT_QUOTES, 'UTF-8'); ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <article class="relative rounded-[2rem] border border-white/70 bg-white/92 px-6 py-8 shadow-soft sm:px-8 sm:py-10">
-                            <div class="pointer-events-none absolute left-5 top-5 text-love-primary/16">
-                                <?php echo renderIcon('quote-left', 'h-10 w-10'); ?>
-                            </div>
-                            <div class="pointer-events-none absolute bottom-5 right-5 text-love-primary/16">
-                                <?php echo renderIcon('quote-right', 'h-10 w-10'); ?>
-                            </div>
-                            <div class="message-prose relative z-10 max-w-none text-lg leading-9 text-slate-800 sm:text-[1.35rem] sm:leading-10 font-romantic">
-                                <?php echo $messageHtml; ?>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <aside class="relative z-10 w-full lg:max-w-sm lg:flex-none">
-            <div class="glass-panel rounded-[2rem] p-6 shadow-soft sm:p-7">
-                <h2 class="text-xl font-bold text-slate-900">继续分享这份爱意</h2>
-                <p class="mt-2 text-sm leading-6 text-slate-600">复制当前链接，或通过常用渠道把这封信继续传递给对方与朋友。</p>
-
-                <div class="mt-6 space-y-3">
-                    <label for="shareLink" class="text-sm font-semibold text-slate-800">当前页面链接</label>
-                    <div class="rounded-3xl border border-slate-200 bg-white p-2 shadow-soft">
-                        <div class="flex flex-col gap-2 sm:flex-row">
-                            <input id="shareLink" type="text" readonly class="ring-focus min-h-12 flex-1 rounded-2xl border border-transparent bg-slate-50 px-4 py-3 text-sm text-slate-700" value="">
-                            <button id="copyLinkBtn" type="button" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-love-primary px-5 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-love-dark cursor-pointer">
-                                <?php echo renderIcon('copy', 'h-4 w-4'); ?>
-                                复制链接
-                            </button>
-                        </div>
-                    </div>
-                    <p id="copyStatus" class="hidden rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700" role="status" aria-live="polite"></p>
-                </div>
-
-                <div class="mt-6 grid grid-cols-2 gap-3">
-                    <a href="#" id="shareWeiboBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-soft transition-colors duration-200 hover:border-love-primary/40 hover:text-love-dark cursor-pointer">
-                        <span class="text-[#E6162D]"><?php echo renderIcon('weibo', 'h-5 w-5'); ?></span>
-                        微博
-                    </a>
-                    <a href="#" id="shareWechatBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-soft transition-colors duration-200 hover:border-love-primary/40 hover:text-love-dark cursor-pointer">
-                        <span class="text-[#07C160]"><?php echo renderIcon('wechat', 'h-5 w-5'); ?></span>
-                        微信
-                    </a>
-                    <a href="#" id="shareQQBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-soft transition-colors duration-200 hover:border-love-primary/40 hover:text-love-dark cursor-pointer">
-                        <span class="text-[#12B7F5]"><?php echo renderIcon('qq', 'h-5 w-5'); ?></span>
-                        QQ
-                    </a>
-                    <a href="#" id="shareEmailBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-soft transition-colors duration-200 hover:border-love-primary/40 hover:text-love-dark cursor-pointer">
-                        <span class="text-orange-500"><?php echo renderIcon('email', 'h-5 w-5'); ?></span>
-                        邮件
-                    </a>
-                </div>
-
-                <div class="mt-6 rounded-[1.5rem] border border-love-primary/10 bg-love-primary/5 p-5">
-                    <p class="inline-flex items-center gap-2 text-sm font-semibold text-love-dark">
-                        <?php echo renderIcon('shield-check', 'h-4 w-4'); ?>
-                        安全查看说明
-                    </p>
-                    <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-600">
-                        <li>• 页面仅展示发送者填写的文字内容，不会在前端暴露更多隐私信息。</li>
-                        <li>• 若链接带密码，请仅分享给目标对象查看。</li>
-                        <li>• 如需创建新的告白，可返回首页重新生成专属页面。</li>
-                    </ul>
-                </div>
-
-                <div class="mt-6 rounded-[1.5rem] border border-slate-200 bg-white/90 p-5 shadow-soft">
-                    <button id="playMusicBtn" type="button" class="ring-focus inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-slate-800 cursor-pointer">
-                        <?php echo renderIcon('music-note', 'h-5 w-5'); ?>
-                        <span>播放音乐</span>
-                    </button>
-                    <p class="mt-3 text-sm text-slate-500">如果浏览器阻止自动播放，可以点击上方按钮手动开启或暂停背景音乐。</p>
-                    <audio id="music" loop preload="none">
-                        <source src="https://static.wenjuan.pub/rspd/upload_file/555ad8c7f7405b0e29df9fcf/music_a709009aea561085cbabff4f66c4d6c6.mp3" type="audio/mpeg">
-                    </audio>
-                </div>
-            </div>
-        </aside>
-    </section>
-</main>
-
-<script>
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const heartContainer = document.getElementById('heartContainer');
-    const shareLink = document.getElementById('shareLink');
-    const copyLinkBtn = document.getElementById('copyLinkBtn');
-    const copyStatus = document.getElementById('copyStatus');
-    const audio = document.getElementById('music');
-    const playMusicBtn = document.getElementById('playMusicBtn');
-    let heartTimer = null;
-
-    shareLink.value = window.location.href;
-
-    function showCopyStatus(message) {
-        copyStatus.textContent = message;
-        copyStatus.classList.remove('hidden');
-        copyStatus.classList.add('copy-glow');
-        window.setTimeout(() => {
-            copyStatus.classList.add('hidden');
-            copyStatus.classList.remove('copy-glow');
-        }, 2200);
-    }
-
-    async function copyToClipboard(text) {
-        if (!text) {
-            throw new Error('没有可复制的链接');
-        }
-        if (navigator.clipboard?.writeText) {
-            await navigator.clipboard.writeText(text);
-            return;
-        }
-        shareLink.removeAttribute('readonly');
-        shareLink.select();
-        document.execCommand('copy');
-        shareLink.setAttribute('readonly', 'readonly');
-    }
-
-    function createHeart() {
-        if (!heartContainer) {
-            return;
-        }
-        const heart = document.createElement('span');
-        heart.className = 'heart-particle';
-        heart.style.left = `${Math.random() * 100}vw`;
-        heart.style.bottom = '-24px';
-        heart.style.setProperty('--drift', `${(Math.random() * 120 - 60).toFixed(2)}px`);
-        heart.style.animationDuration = `${(4.8 + Math.random() * 2).toFixed(2)}s`;
-        heart.style.opacity = String(0.32 + Math.random() * 0.28);
-        heartContainer.appendChild(heart);
-        window.setTimeout(() => heart.remove(), 7000);
-    }
-
-    function startHearts() {
-        if (prefersReducedMotion.matches || heartTimer) {
-            return;
-        }
-        heartTimer = window.setInterval(createHeart, 380);
-        for (let index = 0; index < 8; index += 1) {
-            window.setTimeout(createHeart, index * 120);
-        }
-    }
-
-    function stopHearts() {
-        if (heartTimer) {
-            window.clearInterval(heartTimer);
-            heartTimer = null;
-        }
-    }
-
-    prefersReducedMotion.addEventListener?.('change', () => {
-        if (prefersReducedMotion.matches) {
-            stopHearts();
-        } else {
-            startHearts();
-        }
-    });
-    startHearts();
-
-    copyLinkBtn.addEventListener('click', async () => {
-        try {
-            await copyToClipboard(shareLink.value.trim());
-            showCopyStatus('链接已复制到剪贴板。');
-        } catch (error) {
-            alert(error instanceof Error ? error.message : '复制失败，请手动复制链接。');
-        }
-    });
-
-    document.getElementById('shareWeiboBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        const url = encodeURIComponent(window.location.href);
-        const title = encodeURIComponent('我收到了一份来自“爱在指尖”的浪漫告白，快来看看吧！');
-        window.open(`https://service.weibo.com/share/share.php?url=${url}&title=${title}`, '_blank', 'noopener');
-    });
-
-    document.getElementById('shareQQBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        const url = encodeURIComponent(window.location.href);
-        const title = encodeURIComponent('我收到了一份来自“爱在指尖”的浪漫告白，快来看看吧！');
-        window.open(`https://connect.qq.com/widget/shareqq/index.html?url=${url}&title=${title}&source=${encodeURIComponent('爱在指尖')}`, '_blank', 'noopener');
-    });
-
-    document.getElementById('shareEmailBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        const url = encodeURIComponent(window.location.href);
-        const subject = encodeURIComponent('来自“爱在指尖”的浪漫告白');
-        const body = encodeURIComponent(`我收到了一份来自“爱在指尖”的浪漫告白，快来看看吧！ ${window.location.href}`);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    });
-
-    document.getElementById('shareWechatBtn').addEventListener('click', (event) => {
-        event.preventDefault();
-        alert('当前浏览器暂不支持一键分享到微信，请复制链接或让对方直接打开此页面。');
-    });
-
-    playMusicBtn.addEventListener('click', async () => {
-        try {
-            if (audio.paused) {
-                await audio.play();
-                playMusicBtn.querySelector('span').textContent = '暂停音乐';
-            } else {
-                audio.pause();
-                playMusicBtn.querySelector('span').textContent = '播放音乐';
-            }
-        } catch {
-            alert('当前设备阻止了音频播放，请手动允许后重试。');
-        }
-    });
-</script>
-<?php
+echo renderTemplateHtml($templateHtml, $pageVariables);
 renderAppShellEnd();

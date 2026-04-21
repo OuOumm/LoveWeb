@@ -1,0 +1,267 @@
+<main class="relative isolate min-h-screen overflow-hidden px-4 pb-12 pt-24 sm:px-6 lg:px-8">
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_{{bgColor}}22,_transparent_35%),linear-gradient(180deg,#16071b_0%,#2c1034_45%,#fff7fb_100%)]"></div>
+    <div class="hero-orb left-[-5rem] top-[7rem] h-64 w-64" style="background: {{bgColor}}55;"></div>
+    <div class="hero-orb right-[-4rem] top-[18rem] h-72 w-72" style="background: {{bgColorLight}};"></div>
+    <div id="heartContainer" aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 overflow-hidden"></div>
+
+    <header class="fixed inset-x-4 top-4 z-30 mx-auto w-auto max-w-6xl rounded-full border border-white/10 bg-slate-950/55 px-4 py-3 shadow-soft backdrop-blur-xl sm:px-6">
+        <div class="flex items-center justify-between gap-4 text-white">
+            <a href="/index.html" class="ring-focus inline-flex items-center gap-3 rounded-full text-sm font-semibold text-white transition-colors duration-200 hover:text-love-accent cursor-pointer">
+                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-love-accent">
+                    {{iconHeart}}
+                </span>
+                <span>爱在指尖</span>
+            </a>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button type="button" onclick="history.back()" class="ring-focus inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:border-love-accent/60 hover:text-love-accent cursor-pointer">
+                    {{iconArrowLeft}}
+                    <span class="hidden sm:inline">返回</span>
+                </button>
+                <a href="/index.html#create" class="ring-focus inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-love-primary px-4 py-2 text-sm font-semibold text-white shadow-romantic transition-colors duration-200 hover:bg-love-dark cursor-pointer">
+                    {{iconSparkles}}
+                    再写一封
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-8 pt-10 lg:flex-row lg:items-start">
+        <div class="w-full lg:flex-1">
+            <div class="overflow-hidden rounded-[2rem] border border-white/12 bg-slate-950/45 shadow-romantic backdrop-blur-xl">
+                <div class="relative overflow-hidden px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.16),_transparent_35%)]"></div>
+                    <div class="absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,_{{bgColor}}44,_transparent)]"></div>
+                    <div class="relative z-10 flex flex-col gap-8 text-white">
+                        <div class="flex flex-wrap items-start justify-between gap-4">
+                            <div>
+                                <p class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-love-accent shadow-soft">
+                                    {{iconSparkles}}
+                                    {{heroEyebrow}}
+                                </p>
+                                <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+                                    {{recipient}}，请在星光里读完这封信
+                                </h1>
+                                <p class="mt-4 max-w-2xl text-base leading-7 text-white/75">
+                                    {{letterIntro}}
+                                </p>
+                            </div>
+                            <div class="rounded-3xl border border-white/10 bg-white/8 px-5 py-5 shadow-soft sm:min-w-56">
+                                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">写信的人</p>
+                                <div class="mt-4 space-y-3">
+                                    <div>
+                                        <p class="text-xs text-white/45">来自</p>
+                                        <p class="text-lg font-semibold text-white">{{sender}}</p>
+                                    </div>
+                                    <div class="inline-flex items-center gap-2 text-sm text-white/70">
+                                        {{iconCalendar}}
+                                        <span>{{displayDate}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <article class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/90 px-6 py-8 text-slate-900 shadow-soft sm:px-8 sm:py-10">
+                            <div class="absolute inset-x-0 top-0 h-1.5" style="background: linear-gradient(90deg, {{bgColor}}, {{bgColorLight}});"></div>
+                            <div class="pointer-events-none absolute -left-3 top-4 text-love-primary/10">
+                                {{iconQuoteLeft}}
+                            </div>
+                            <div class="pointer-events-none absolute bottom-4 right-4 text-love-primary/10">
+                                {{iconQuoteRight}}
+                            </div>
+                            <div class="message-prose relative z-10 max-w-none text-lg leading-9 text-slate-800 sm:text-[1.28rem] sm:leading-10 font-romantic">
+                                {{messageHtml}}
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="relative z-10 w-full lg:max-w-sm lg:flex-none">
+            <div class="rounded-[2rem] border border-white/10 bg-slate-950/45 p-6 text-white shadow-soft backdrop-blur-xl sm:p-7">
+                <h2 class="text-xl font-bold text-white">{{shareTitle}}</h2>
+                <p class="mt-2 text-sm leading-6 text-white/65">{{shareDescription}}</p>
+
+                <div class="mt-6 space-y-3">
+                    <label for="shareLink" class="text-sm font-semibold text-white/85">当前页面链接</label>
+                    <div class="rounded-3xl border border-white/10 bg-white/5 p-2 shadow-soft">
+                        <div class="flex flex-col gap-2 sm:flex-row">
+                            <input id="shareLink" type="text" readonly class="ring-focus min-h-12 flex-1 rounded-2xl border border-transparent bg-white/95 px-4 py-3 text-sm text-slate-700" value="{{currentUrl}}">
+                            <button id="copyLinkBtn" type="button" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-love-primary px-5 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-love-dark cursor-pointer">
+                                {{iconCopy}}
+                                复制链接
+                            </button>
+                        </div>
+                    </div>
+                    <p id="copyStatus" class="hidden rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700" role="status" aria-live="polite"></p>
+                </div>
+
+                <div class="mt-6 grid grid-cols-2 gap-3">
+                    <a href="#" id="shareWeiboBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white shadow-soft transition-colors duration-200 hover:border-love-accent/40 hover:text-love-accent cursor-pointer">
+                        <span class="text-[#E6162D]">{{iconWeibo}}</span>
+                        微博
+                    </a>
+                    <a href="#" id="shareWechatBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white shadow-soft transition-colors duration-200 hover:border-love-accent/40 hover:text-love-accent cursor-pointer">
+                        <span class="text-[#07C160]">{{iconWechat}}</span>
+                        微信
+                    </a>
+                    <a href="#" id="shareQQBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white shadow-soft transition-colors duration-200 hover:border-love-accent/40 hover:text-love-accent cursor-pointer">
+                        <span class="text-[#12B7F5]">{{iconQQ}}</span>
+                        QQ
+                    </a>
+                    <a href="#" id="shareEmailBtn" class="ring-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white shadow-soft transition-colors duration-200 hover:border-love-accent/40 hover:text-love-accent cursor-pointer">
+                        <span class="text-orange-400">{{iconEmail}}</span>
+                        邮件
+                    </a>
+                </div>
+
+                <div class="mt-6 rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
+                    <p class="inline-flex items-center gap-2 text-sm font-semibold text-love-accent">
+                        {{iconShieldCheck}}
+                        {{securityTitle}}
+                    </p>
+                    <ul class="mt-3 space-y-2 text-sm leading-6 text-white/65">
+                        <li>• 页面仅展示发送者填写的文字内容，不会在前端暴露更多隐私信息。</li>
+                        <li>• 若链接带密码，请仅分享给目标对象查看。</li>
+                        <li>• 如需创建新的告白，可返回首页重新生成专属页面。</li>
+                    </ul>
+                </div>
+
+                <div class="mt-6 rounded-[1.5rem] border border-white/10 bg-white/5 p-5 shadow-soft">
+                    <button id="playMusicBtn" type="button" class="ring-focus inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition-colors duration-200 hover:bg-love-accent cursor-pointer">
+                        {{iconMusicNote}}
+                        <span>{{musicButtonText}}</span>
+                    </button>
+                    <p class="mt-3 text-sm text-white/60">{{musicHint}}</p>
+                    <audio id="music" loop preload="none">
+                        <source src="{{musicUrl}}" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </aside>
+    </section>
+</main>
+<script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const heartContainer = document.getElementById('heartContainer');
+    const shareLink = document.getElementById('shareLink');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const copyStatus = document.getElementById('copyStatus');
+    const audio = document.getElementById('music');
+    const playMusicBtn = document.getElementById('playMusicBtn');
+    let heartTimer = null;
+
+    function showCopyStatus(message) {
+        copyStatus.textContent = message;
+        copyStatus.classList.remove('hidden');
+        copyStatus.classList.add('copy-glow');
+        window.setTimeout(() => {
+            copyStatus.classList.add('hidden');
+            copyStatus.classList.remove('copy-glow');
+        }, 2200);
+    }
+
+    async function copyToClipboard(text) {
+        if (!text) {
+            throw new Error('没有可复制的链接');
+        }
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+            return;
+        }
+        shareLink.removeAttribute('readonly');
+        shareLink.select();
+        document.execCommand('copy');
+        shareLink.setAttribute('readonly', 'readonly');
+    }
+
+    function createHeart() {
+        if (!heartContainer || heartContainer.childElementCount > 36) {
+            return;
+        }
+        const heart = document.createElement('span');
+        heart.className = 'heart-particle';
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.bottom = '-24px';
+        heart.style.setProperty('--drift', `${(Math.random() * 160 - 80).toFixed(2)}px`);
+        heart.style.animationDuration = `${(5.2 + Math.random() * 2.4).toFixed(2)}s`;
+        heart.style.opacity = String(0.28 + Math.random() * 0.24);
+        heartContainer.appendChild(heart);
+        window.setTimeout(() => heart.remove(), 7600);
+    }
+
+    function startHearts() {
+        if (prefersReducedMotion.matches || heartTimer) {
+            return;
+        }
+        heartTimer = window.setInterval(createHeart, 420);
+        for (let index = 0; index < 8; index += 1) {
+            window.setTimeout(createHeart, index * 140);
+        }
+    }
+
+    function stopHearts() {
+        if (heartTimer) {
+            window.clearInterval(heartTimer);
+            heartTimer = null;
+        }
+    }
+
+    prefersReducedMotion.addEventListener?.('change', () => {
+        if (prefersReducedMotion.matches) {
+            stopHearts();
+        } else {
+            startHearts();
+        }
+    });
+    startHearts();
+
+    copyLinkBtn.addEventListener('click', async () => {
+        try {
+            await copyToClipboard(shareLink.value.trim());
+            showCopyStatus('链接已复制到剪贴板。');
+        } catch (error) {
+            alert(error instanceof Error ? error.message : '复制失败，请手动复制链接。');
+        }
+    });
+
+    document.getElementById('shareWeiboBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+        const url = encodeURIComponent(window.location.href);
+        const title = encodeURIComponent('我收到了一份来自“爱在指尖”的浪漫告白，快来看看吧！');
+        window.open(`https://service.weibo.com/share/share.php?url=${url}&title=${title}`, '_blank', 'noopener');
+    });
+
+    document.getElementById('shareQQBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+        const url = encodeURIComponent(window.location.href);
+        const title = encodeURIComponent('我收到了一份来自“爱在指尖”的浪漫告白，快来看看吧！');
+        window.open(`https://connect.qq.com/widget/shareqq/index.html?url=${url}&title=${title}&source=${encodeURIComponent('爱在指尖')}`, '_blank', 'noopener');
+    });
+
+    document.getElementById('shareEmailBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+        const subject = encodeURIComponent('来自“爱在指尖”的浪漫告白');
+        const body = encodeURIComponent(`我收到了一份来自“爱在指尖”的浪漫告白，快来看看吧！ ${window.location.href}`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    });
+
+    document.getElementById('shareWechatBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+        alert('当前浏览器暂不支持一键分享到微信，请复制链接或让对方直接打开此页面。');
+    });
+
+    playMusicBtn.addEventListener('click', async () => {
+        try {
+            if (audio.paused) {
+                await audio.play();
+                playMusicBtn.querySelector('span').textContent = '暂停音乐';
+            } else {
+                audio.pause();
+                playMusicBtn.querySelector('span').textContent = '{{musicButtonText}}';
+            }
+        } catch {
+            alert('当前设备阻止了音频播放，请手动允许后重试。');
+        }
+    });
+</script>

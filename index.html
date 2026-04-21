@@ -7,6 +7,7 @@
     <title>爱在指尖 - 情人节专属告白</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.404888.xyz/proxy/https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -408,6 +409,14 @@
                             </div>
 
                             <fieldset class="space-y-3">
+                                <legend class="text-sm font-semibold text-slate-800">选择展示模板</legend>
+                                <div id="templateOptions" class="grid gap-3 sm:grid-cols-2">
+                                    <div class="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">正在加载模板列表…</div>
+                                </div>
+                                <input type="hidden" id="template" name="template" value="default">
+                            </fieldset>
+
+                            <fieldset class="space-y-3">
                                 <legend class="text-sm font-semibold text-slate-800">选择背景风格</legend>
                                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
                                     <button type="button"
@@ -448,6 +457,11 @@
                                     class="ring-focus w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:border-love-primary"
                                     placeholder="如果希望只给特定的人看，可以设置密码">
                                 <p class="text-sm leading-6 text-slate-500">密码不会展示在页面上，仅用于访问控制。</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div id="turnstileWidget" class="min-h-[65px]"></div>
+                                <p id="turnstileError" class="hidden rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700"></p>
                             </div>
 
                             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -758,8 +772,12 @@
         const copyStatus = document.getElementById('copyStatus');
         const downloadQrBtn = document.getElementById('downloadQrBtn');
         const bgOptions = document.querySelectorAll('.bg-option');
+        const templateOptionsContainer = document.getElementById('templateOptions');
+        const turnstileError = document.getElementById('turnstileError');
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         let heartTimer = null;
+        let turnstileWidgetId = null;
+        let turnstileToken = '';
 
         function updateNavbarState() {
             if (window.scrollY > 24) {
@@ -789,6 +807,90 @@
                 option.classList.toggle('border-slate-200', !selected);
             });
             document.getElementById('bgColor').value = value;
+        }
+
+        function setSelectedTemplate(value) {
+            document.querySelectorAll('.template-option').forEach((option) => {
+                const selected = option.dataset.template === value;
+                option.setAttribute('aria-pressed', selected ? 'true' : 'false');
+                option.classList.toggle('border-love-primary', selected);
+                option.classList.toggle('border-slate-200', !selected);
+                option.classList.toggle('bg-love-primary/10', selected);
+                option.classList.toggle('bg-white', !selected);
+            });
+            document.getElementById('template').value = value;
+        }
+
+        function showTurnstileError(message) {
+            turnstileError.textContent = message;
+            turnstileError.classList.remove('hidden');
+        }
+
+        function clearTurnstileError() {
+            turnstileError.textContent = '';
+            turnstileError.classList.add('hidden');
+        }
+
+        function resetTurnstileWidget() {
+            turnstileToken = '';
+            if (window.turnstile && turnstileWidgetId !== null) {
+                window.turnstile.reset(turnstileWidgetId);
+            }
+        }
+
+        function initTurnstileWidget() {
+            if (!window.turnstile || turnstileWidgetId !== null) {
+                return;
+            }
+            turnstileWidgetId = window.turnstile.render('#turnstileWidget', {
+                sitekey: 'your_sitekey_here',
+                theme: 'light',
+                callback: (token) => {
+                    turnstileToken = token;
+                    clearTurnstileError();
+                },
+                'expired-callback': () => {
+                    turnstileToken = '';
+                    showTurnstileError('验证已过期，请重新完成人机验证。');
+                },
+                'error-callback': () => {
+                    turnstileToken = '';
+                    showTurnstileError('Turnstile 加载失败，请刷新页面后重试。');
+                }
+            });
+        }
+
+        async function loadTemplateOptions() {
+            try {
+                const response = await fetch('templates.php');
+                if (!response.ok) {
+                    throw new Error('模板列表加载失败');
+                }
+                const data = await response.json();
+                const templates = Array.isArray(data.templates) ? data.templates : [];
+                if (templates.length === 0) {
+                    throw new Error('暂无可用模板');
+                }
+
+                templateOptionsContainer.innerHTML = templates.map((template) => `
+                    <button type="button"
+                        class="template-option ring-focus rounded-3xl border-2 border-slate-200 bg-white p-4 text-left transition-colors duration-200 hover:border-love-primary"
+                        data-template="${template.key}" aria-pressed="false">
+                        <span class="block text-sm font-semibold text-slate-800">${template.name}</span>
+                        <span class="mt-1 block text-xs leading-6 text-slate-500">${template.description || template.previewText || ''}</span>
+                    </button>
+                `).join('');
+
+                document.querySelectorAll('.template-option').forEach((option) => {
+                    option.addEventListener('click', () => setSelectedTemplate(option.dataset.template));
+                });
+
+                const defaultTemplate = templates.find((template) => template.isDefault) || templates[0];
+                setSelectedTemplate(defaultTemplate.key);
+            } catch (error) {
+                templateOptionsContainer.innerHTML = '<div class="rounded-3xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-600">模板列表加载失败，已回退为默认模板。</div>';
+                setSelectedTemplate('default');
+            }
         }
 
         function createHeart() {
@@ -946,6 +1048,9 @@
             option.addEventListener('click', () => setSelectedBackground(option.dataset.bg));
         });
         setSelectedBackground('love-primary');
+        loadTemplateOptions();
+        initTurnstileWidget();
+        window.setTimeout(initTurnstileWidget, 600);
 
         document.getElementById('shareWechat').addEventListener('click', (event) => {
             event.preventDefault();
@@ -957,7 +1062,12 @@
 
         confessionForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+            clearTurnstileError();
             if (!confessionForm.reportValidity()) {
+                return;
+            }
+            if (!turnstileToken) {
+                showTurnstileError('请先完成人机验证后再提交。');
                 return;
             }
 
@@ -972,7 +1082,9 @@
                     sender: String(formData.get('sender') || '').trim(),
                     message: String(formData.get('message') || '').trim(),
                     bgColor: String(formData.get('bgColor') || 'love-primary'),
+                    template: String(formData.get('template') || 'default'),
                     password: String(formData.get('password') || ''),
+                    turnstileToken,
                     ip: await getIP()
                 };
 
@@ -982,13 +1094,13 @@
                     body: JSON.stringify(confessionData)
                 });
 
+                const data = await response.json().catch(() => null);
                 if (!response.ok) {
-                    throw new Error(`服务器响应错误：${response.status}`);
+                    throw new Error(data?.error || `服务器响应错误：${response.status}`);
                 }
 
-                const data = await response.json();
-                if (!data.success || !data.url) {
-                    throw new Error(data.error || '生成告白失败，请稍后重试。');
+                if (!data || !data.success || !data.url) {
+                    throw new Error(data?.error || '生成告白失败，请稍后重试。');
                 }
 
                 shareLink.value = data.url;
@@ -998,9 +1110,11 @@
                 loading.classList.add('hidden');
                 result.classList.remove('hidden');
                 result.scrollIntoView({ behavior: prefersReducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+                resetTurnstileWidget();
             } catch (error) {
                 loading.classList.add('hidden');
                 confessionForm.classList.remove('hidden');
+                resetTurnstileWidget();
                 alert(error instanceof Error ? error.message : '生成失败，请稍后重试。');
             }
         });
